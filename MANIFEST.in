@@ -1,0 +1,32 @@
+include LICENSE
+include README.md
+include pyproject.toml
+include Cargo.toml
+include Cargo.lock
+
+# Include source files
+recursive-include src *.rs
+
+# Include Python package
+recursive-include neuro_import *.py
+
+# Exclude data files
+recursive-exclude data *
+global-exclude *.rhs
+global-exclude *.rhd
+global-exclude *.dat
+global-exclude *.abf
+global-exclude *.mat
+global-exclude *.nwb
+global-exclude *.nix
+global-exclude *.nev
+global-exclude *.ns*
+
+# Exclude development files
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.so
+global-exclude .git*
+global-exclude .DS_Store
+global-exclude .vscode
+global-exclude .idea
