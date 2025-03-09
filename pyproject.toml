@@ -5,7 +5,7 @@ build-backend = "maturin"
 [project]
 name = "neuro_import"
 version = "0.1.0"
-description = "Fast and flexible neurophysiology data import library"
+description = "Python wrapper for Rust-based RHS file loader"
 authors = [
     {name = "Jason Brant", email = "jason.brant@onlsbs.com"}
 ]
@@ -17,7 +17,6 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
-    "Programming Language :: Python :: Implementation :: PyPy",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
@@ -26,20 +25,23 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
-    "Topic :: Scientific/Engineering :: Medical Science Apps.",
 ]
+# NumPy needed for array handling
 dependencies = [
-    "numpy>=1.20.0",
-    "matplotlib>=3.4.0",
+    "numpy>=1.20.0"
 ]
-
-[project.urls]
-Repository = "https://github.com/yourusername/neuro_import"
-Documentation = "https://neuro-import.readthedocs.io"
-"Bug Tracker" = "https://github.com/yourusername/neuro_import/issues"
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
 python-source = "neuro_import"
-module-name = "neuro_import._neuro_import"
-exclude = ["data/*", "*.rhs", "*.rhd", "*.dat", "*.abf", "*.mat", "*.nwb", "*.nix"]
+module-name = "neuro_import"
+exclude = [
+    "data/*", 
+    "*.rhs", 
+    "*.rhd", 
+    "*.dat", 
+    "*.abf", 
+    "*.mat", 
+    "*.nwb", 
+    "*.nix"
+]

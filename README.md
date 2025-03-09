@@ -1,17 +1,12 @@
 # NeuroImport
 
-A fast and flexible Python library for importing neurophysiology data, built on Rust.
+A lightweight Python wrapper for loading Intan RHS neurophysiology data files using a Rust backend.
 
 ## Features
 
 - **High Performance**: Uses Rust for fast file parsing and data handling
-- **File Format Detection**: Automatically selects the appropriate importer based on file extension
-- **Extensible**: Designed to easily support additional file formats 
-- **Pythonic Interface**: Clean, well-documented API with NumPy integration
-
-## Currently Supported Formats
-
-- Intan RHS files (.rhs) - Using a custom Rust implementation for speed
+- **Simple Interface**: Direct access to RHS file contents through a clean Python interface
+- **Memory Efficient**: Optimized data structures to minimize memory usage
 
 ## Installation
 
@@ -22,18 +17,23 @@ pip install neuro_import
 ## Quick Start
 
 ```python
-import neuro_import as ni
-import matplotlib.pyplot as plt
+from neuro_import import load_rhs_file
 
-# Load a file
-result, data_present = ni.load_file("path/to/your/file.rhs")
+# Load an RHS file
+result = load_rhs_file("path/to/your/file.rhs")
 
-# Print all channel names
-ni.print_all_channel_names(result)
-
-# Plot a specific channel
-fig, ax = ni.plot_channel("channel_name", result)
-plt.show()
+# Check if data is present
+if result.data_present:
+    # Access header information
+    print(f"Sample rate: {result.frequency_parameters['amplifier_sample_rate']} Hz")
+    print(f"Number of channels: {len(result.amplifier_channels)}")
+    
+    # Access data
+    if result.amplifier_data:
+        # First channel, first 5 samples
+        print(result.amplifier_data[0][:5])
+        # Timestamps in seconds
+        print(result.t[:5])
 ```
 
 ## Example Usage
@@ -50,30 +50,32 @@ python example.py
 
 ## Development and Testing
 
-For development and testing, you can store sample data files in the `data/` directory. 
-This directory is excluded from version control and package distribution.
+For development and testing:
 
-## Python Requirements
+1. Clone the repository
+2. Place sample RHS files in the `data/` directory
+3. Build the extension module:
+   ```bash
+   maturin develop
+   # OR to build for release
+   maturin build --release
+   ```
+4. Run the example script:
+   ```bash
+   python example.py
+   ```
+
+## Requirements
 
 - Python 3.8+
 - NumPy
-- Matplotlib
 
 ## Performance
 
 NeuroImport's Rust-based implementation offers significant performance improvements over pure Python implementations:
 
-- Faster file loading 
-- Reduced memory overhead
-- Efficient data processing
-
-## Documentation
-
-For full documentation, visit [neuro-import.readthedocs.io](https://neuro-import.readthedocs.io).
-
-## Contributing
-
-Contributions are welcome! If you'd like to add support for additional file formats or improve the existing code, please feel free to submit a pull request.
+- Fast file loading with minimal memory overhead
+- Efficient data processing and conversion
 
 ## License
 

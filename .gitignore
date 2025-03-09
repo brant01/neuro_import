@@ -1,78 +1,33 @@
-/target
-
-# Byte-compiled / optimized / DLL files
+# Python
 __pycache__/
-.pytest_cache/
 *.py[cod]
-
-# C extensions
+*$py.class
 *.so
-
-# Distribution / packaging
 .Python
-.venv/
-env/
-bin/
 build/
 develop-eggs/
 dist/
+downloads/
 eggs/
+.eggs/
 lib/
 lib64/
 parts/
 sdist/
 var/
-include/
-man/
-venv/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-pip-selfcheck.json
+# Rust
+target/
+**/*.rs.bk
+Cargo.lock
+!Cargo.toml
 
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.cache
-nosetests.xml
-coverage.xml
-
-# Translations
-*.mo
-
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
-
-# Rope
-.ropeproject
-
-# Django stuff:
-*.log
-*.pot
-
-.DS_Store
-
-# Sphinx documentation
-docs/_build/
-
-# PyCharm
-.idea/
-
-# VSCode
-.vscode/
-
-# Pyenv
-.python-version
-
-# Neurophysiology data files
-/data/
+# Data files
+data/
 *.rhs
 *.rhd
 *.dat
@@ -82,3 +37,20 @@ docs/_build/
 *.nix
 *.nev
 *.ns*
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store

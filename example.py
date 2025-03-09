@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 """
-Example usage of neuro_import library for loading and plotting RHS data.
+Example usage of neuro_import library for loading RHS data.
 
 This script demonstrates how to:
-1. Load an Intan RHS file
-2. List available channels
-3. Plot data from a specific channel
+1. Load an Intan RHS file using the Rust-based importer
+2. Access properties of the loaded RHS data
 
 Note: This example uses files in the 'data' directory which is not included in
 the package distribution. You'll need to provide your own RHS data files.
@@ -15,11 +14,8 @@ import sys
 import os
 import glob
 
-# Import these conditionally so the file-finding function can be imported alone
-# for testing without needing matplotlib or neuro_import installed
-if __name__ == "__main__":
-    import neuro_import as ni
-    import matplotlib.pyplot as plt
+# Import the RHS file loader
+from neuro_import import load_rhs_file
 
 
 def find_sample_data():
@@ -56,32 +52,41 @@ def main():
     
     print(f"Loading file: {filename}")
     
-    # Load the file
+    # Load the file using the Rust-based importer
     try:
-        result, data_present = ni.load_file(filename)
+        # This directly calls the Rust function through Python bindings
+        result = load_rhs_file(filename)
     except Exception as e:
         print(f"Error loading file: {e}")
         return 1
     
     # Check if data was found in the file
-    if not data_present:
+    if not result.data_present:
         print("No data found in the file.")
         return 0
     
-    # Print all available channels
-    print("\nAvailable channels:")
-    ni.print_all_channel_names(result)
+    # Print some basic information about the file
+    print(f"\nReference channel: {result.reference_channel}")
+    print(f"Sample rate: {result.frequency_parameters['amplifier_sample_rate']} Hz")
+    print(f"Number of amplifier channels: {len(result.amplifier_channels)}")
     
-    # Plot a channel (if available)
-    if 'amplifier_channels' in result and len(result['amplifier_channels']) > 0:
-        channel_name = result['amplifier_channels'][0]['custom_channel_name']
-        print(f"\nPlotting channel: {channel_name}")
+    # Print some notes from the file if available
+    if result.notes:
+        print("\nNotes:")
+        for key, value in result.notes.items():
+            if value.strip():  # Only print non-empty notes
+                print(f"  {key}: {value}")
+    
+    # Print information about the first channel if available
+    if result.amplifier_channels:
+        channel = result.amplifier_channels[0]
+        print(f"\nFirst channel: {channel['custom_channel_name']}")
         
-        fig, ax = ni.plot_channel(channel_name, result)
-        plt.title(f"Channel: {channel_name}")
-        plt.show()
-    else:
-        print("\nNo amplifier channels found to plot.")
+        # Print data dimensions if available
+        if result.amplifier_data:
+            print(f"Data shape: {len(result.amplifier_data)} channels x {len(result.amplifier_data[0])} samples")
+            print(f"First few values: {result.amplifier_data[0][:5]}")
+            print(f"Time (s): {result.t[:5]}")
     
     return 0
 
